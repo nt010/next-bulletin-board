@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,6 +18,7 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { postBBS } from "@/app/actions/postBBSAction";
 
 export const formSchema = z.object({
@@ -30,22 +32,47 @@ export const formSchema = z.object({
     .string()
     .min(10, { message: "内容は10文字以上で入力してください" })
     .max(140, { message: "内容は140文字以内で入力してください" }),
+  image: z.instanceof(File).optional(), // File型を指定
 });
 
 const CreatePage = () => {
   const router = useRouter();
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // プレビュー用の状態
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
       title: "",
       content: "",
+      image: undefined,
     },
   });
   async function onSubmit(value: z.infer<typeof formSchema>) {
-    const { username, title, content } = value;
-    postBBS({ username, title, content });
+    const { username, title, content, image } = value;
+
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("title", title);
+    formData.append("content", content);
+    if (image) {
+      formData.append("image", image);
+    }
+
+    // サーバーに送信
+    await postBBS(formData);
   }
+
+  // ファイル選択時の処理
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result as string); // プレビュー用URLを設定
+      };
+      reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
+    }
+  };
 
   return (
     <Form {...form}>
@@ -102,6 +129,28 @@ const CreatePage = () => {
             </FormItem>
           )}
         />
+        {/* 画像アップロード */}
+        <FormItem>
+          <FormLabel>Upload Image</FormLabel>
+          <FormControl>
+            <Input type="file" accept="image/*" onChange={handleImageChange} />
+          </FormControl>
+          <FormDescription>
+            アップロードした画像のプレビューが下に表示されます。
+          </FormDescription>
+          {imagePreview && (
+            <div className="mt-2">
+              <Image
+                src={imagePreview}
+                alt="Preview"
+                width={200}
+                height={200}
+                className="rounded-lg"
+              />
+            </div>
+          )}
+        </FormItem>
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>

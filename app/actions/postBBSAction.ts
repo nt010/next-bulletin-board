@@ -4,7 +4,7 @@ import { z } from "zod";
 import { formSchema } from "../bbs-posts/create/page";
 import prisma from "../../lib/prismaClient";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { raevalidatePath } from "next/cache";
 
 export const postBBS = async ({username, title, content}: z.infer<typeof formSchema>) => {
     await prisma.post.create({
