@@ -48,18 +48,22 @@ const CreatePage = () => {
     },
   });
   async function onSubmit(value: z.infer<typeof formSchema>) {
-    const { username, title, content, image } = value;
-
     const formData = new FormData();
-    formData.append("username", username);
-    formData.append("title", title);
-    formData.append("content", content);
-    if (image) {
-      formData.append("image", image);
+    formData.append("username", value.username);
+    formData.append("title", value.title);
+    formData.append("content", value.content);
+  
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput?.files?.[0]) {
+      formData.append("image", fileInput.files[0]);
     }
-
-    // サーバーに送信
-    await postBBS(formData);
+  
+    try {
+      await postBBS(formData); // サーバーに送信
+      router.push("/"); // 成功した場合はリダイレクト
+    } catch (error) {
+      console.error("投稿に失敗しました:", error);
+    }
   }
 
   // ファイル選択時の処理
