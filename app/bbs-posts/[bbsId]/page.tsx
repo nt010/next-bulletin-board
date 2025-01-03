@@ -14,13 +14,20 @@ async function getBBSDetailData(id: number) {
 const DetailPage = async ({ params }: { params: { bbsId: number } }) => {
   const bbsDetailData = await getBBSDetailData(params.bbsId);
   console.log(bbsDetailData);
-  const { title, content, createdAt, username } = bbsDetailData;
+  const { title, content, createdAt, username, imageUrl } = bbsDetailData;
   return (
     <div className="mx-auto max-w-4xl p-4">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">{title}</h1>
         <p className="text-gray-700">{username}</p>
       </div>
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt={title}
+          className="mb-4 w-full rounded-lg object-cover"
+        />
+      )}
       <p>{new Date(createdAt).toLocaleString()}</p>
       <div>
         <p className="text-gray-900">{content}</p>

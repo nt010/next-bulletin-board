@@ -15,7 +15,7 @@ interface BBSDataProps {
 }
 
 const Cards = ({ bbsData }: BBSDataProps) => {
-  const { id, title, content, createdAt, username } = bbsData;
+  const { id, title, content, createdAt, username, imageUrl } = bbsData;
 
   return (
     <Card>
@@ -25,6 +25,13 @@ const Cards = ({ bbsData }: BBSDataProps) => {
           {username} - {new Date(createdAt).toLocaleDateString()}
         </CardDescription>
       </CardHeader>
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt={title}
+          className="h-48 w-full object-cover rounded-t-lg"
+        />
+      )}
       <CardContent>{content}</CardContent>
       <CardFooter className="flex justify-between">
         <Link href={`/bbs-posts/${id}`} className="text-blue-500">

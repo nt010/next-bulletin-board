@@ -4,4 +4,5 @@ export interface BBSData {
     title: string;
     content: string;
     createdAt: Date;
+    imageUrl: string;
 }

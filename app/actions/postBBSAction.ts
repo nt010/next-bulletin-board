@@ -1,58 +1,57 @@
-"use server";
+import supabase from "@/lib/supabaseClient";
 
-import { z } from "zod";
-import { formSchema } from "../bbs-posts/create/page"; // スキーマのインポート
-import prisma from "../../lib/prismaClient"; // Prisma クライアントのインポート
-import supabase from "../../lib/supabaseClient"; // Supabase クライアントのインポート
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-
-export const postBBS = async ({
-  username,
-  title,
-  content,
-  file,
-}: z.infer<typeof formSchema> & { file: File | null }) => {
+export const postBBS = async (formData: FormData) => {
   try {
+    // フォームデータから情報を取得
+    const { username, title, content } = Object.fromEntries(formData.entries());
+
+    // 初期値
     let imageUrl = null;
 
-    if (file) {
-      // Supabaseに画像をアップロード
-      const fileName = `${Date.now()}_${file.name}`;
-      const { data, error } = await supabase.storage
-        .from("images") // バケット名
-        .upload(fileName, file);
+    // 画像をSupabaseストレージにアップロード
+    const imageFile = formData.get("image") as File | null;
+    if (imageFile) {
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("upload")
+        .upload(`images/${Date.now()}-${imageFile.name}`, imageFile);
 
-      if (error) {
-        console.error("Error uploading file to Supabase:", error);
-        throw new Error("画像のアップロードに失敗しました");
+      // アップロードエラーをチェック
+      if (uploadError) {
+        console.error("Image upload error:", uploadError.message);
+        throw new Error(`画像のアップロードに失敗しました: ${uploadError.message}`);
       }
 
-      // 公開URLを取得
-      const { data: publicUrlData } = supabase.storage
-        .from("images")
-        .getPublicUrl(fileName);
+      // アップロード成功時にパスを取得
+      if (uploadData) {
+        const { data: publicUrlData, error: publicUrlError } = supabase.storage
+          .from("upload")
+          .getPublicUrl(uploadData.path);
 
-      imageUrl = publicUrlData?.publicUrl || null;
+        if (publicUrlError) {
+          console.error("Error getting public URL:", publicUrlError.message);
+          throw new Error("画像の公開URL取得に失敗しました");
+        }
+
+        imageUrl = publicUrlData.publicUrl;
+      }
     }
 
-    // Prismaを使ってデータを保存
-    await prisma.post.create({
-      data: {
-        username,
-        title,
-        content,
-        imageUrl, // 画像URLを保存
-      },
+    // 投稿データをSupabaseに保存
+    const { data, error } = await supabase.from("Post").insert({
+      username,
+      title,
+      content,
+      imageUrl: imageUrl, // アップロードされた画像のURL
     });
 
-    // キャッシュの再検証
-    revalidatePath("/");
+    if (error) {
+      console.error("Database insert error:", error.message);
+      throw new Error("Supabaseへの投稿に失敗しました");
+    }
 
-    // "/" ページにリダイレクト
-    redirect("/");
+    return data;
   } catch (error) {
-    console.error("Error while posting BBS:", error);
-    throw new Error("投稿に失敗しました");
+    console.error("Error while posting BBS:", error.message);
+    throw new Error(`投稿に失敗しました: ${error.message}`);
   }
 };

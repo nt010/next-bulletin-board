@@ -32,7 +32,6 @@ export const formSchema = z.object({
     .string()
     .min(10, { message: "内容は10文字以上で入力してください" })
     .max(140, { message: "内容は140文字以内で入力してください" }),
-  image: z.instanceof(File).optional(), // File型を指定
 });
 
 const CreatePage = () => {
@@ -52,7 +51,7 @@ const CreatePage = () => {
     formData.append("username", value.username);
     formData.append("title", value.title);
     formData.append("content", value.content);
-  
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput?.files?.[0]) {
       formData.append("image", fileInput.files[0]);
@@ -70,6 +69,11 @@ const CreatePage = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // 画像ファイルサイズをチェック（例: 2MB以下）
+      if (file.size > 2 * 1024 * 1024) {
+        alert("画像サイズは2MB以下にしてください");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         setImagePreview(reader.result as string); // プレビュー用URLを設定
@@ -77,6 +81,7 @@ const CreatePage = () => {
       reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
     }
   };
+
 
   return (
     <Form {...form}>
