@@ -4,5 +4,6 @@ export interface BBSData {
     title: string;
     content: string;
     createdAt: Date;
+    todo: string;
     imageUrl: string;
 }

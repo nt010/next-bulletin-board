@@ -14,7 +14,8 @@ async function getBBSDetailData(id: number) {
 const DetailPage = async ({ params }: { params: { bbsId: number } }) => {
   const bbsDetailData = await getBBSDetailData(params.bbsId);
   console.log(bbsDetailData);
-  const { title, content, createdAt, username, imageUrl } = bbsDetailData;
+  const { title, content, createdAt, username, imageUrl, todo } = bbsDetailData;
+
   return (
     <div className="mx-auto max-w-4xl p-4">
       <div className="mb-8">
@@ -32,6 +33,7 @@ const DetailPage = async ({ params }: { params: { bbsId: number } }) => {
       <div>
         <p className="text-gray-900">{content}</p>
       </div>
+      <div>{todo}</div>
       <Link href="/" className="text-blue-500">
         Back
       </Link>

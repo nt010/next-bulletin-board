@@ -20,4 +20,5 @@ model Post {
   content String
   imageUrl  String?  // 画像URLを保存
   createdAt DateTime @default(now())
+  todo String
 }

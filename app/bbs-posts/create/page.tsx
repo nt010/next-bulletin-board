@@ -32,6 +32,7 @@ export const formSchema = z.object({
     .string()
     .min(10, { message: "内容は10文字以上で入力してください" })
     .max(140, { message: "内容は140文字以内で入力してください" }),
+  todo: z.string(),
 });
 
 const CreatePage = () => {
@@ -43,20 +44,26 @@ const CreatePage = () => {
       username: "",
       title: "",
       content: "",
+      todo: "500yen",
       image: undefined,
     },
   });
+
   async function onSubmit(value: z.infer<typeof formSchema>) {
     const formData = new FormData();
     formData.append("username", value.username);
     formData.append("title", value.title);
     formData.append("content", value.content);
+    formData.append("todo", value.todo);
 
+    // 画像のバリデーション
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-    if (fileInput?.files?.[0]) {
-      formData.append("image", fileInput.files[0]);
+    if (!fileInput?.files?.[0]) {
+      alert("正しい形式の画像をアップロードしてください");
+      return;
     }
-  
+    formData.append("image", fileInput.files[0]);
+
     try {
       await postBBS(formData); // サーバーに送信
       router.push("/"); // 成功した場合はリダイレクト
@@ -69,7 +76,7 @@ const CreatePage = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // 画像ファイルサイズをチェック（例: 2MB以下）
+      // 画像サイズをチェック
       if (file.size > 2 * 1024 * 1024) {
         alert("画像サイズは2MB以下にしてください");
         return;
@@ -106,6 +113,7 @@ const CreatePage = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="title"
@@ -122,6 +130,7 @@ const CreatePage = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="content"
@@ -138,9 +147,23 @@ const CreatePage = () => {
             </FormItem>
           )}
         />
-        {/* 画像アップロード */}
+
+        <FormField
+          control={form.control}
+          name="todo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Todo</FormLabel>
+              <FormControl>
+                <Input placeholder="やってほしいことを入力してください" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormItem>
-          <FormLabel>Upload Image</FormLabel>
+          <FormLabel>Upload Image(only jpg・jpeg・png)</FormLabel>
           <FormControl>
             <Input type="file" accept="image/*" onChange={handleImageChange} />
           </FormControl>

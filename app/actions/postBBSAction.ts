@@ -3,13 +3,13 @@ import supabase from "@/lib/supabaseClient";
 export const postBBS = async (formData: FormData) => {
   try {
     // フォームデータから情報を取得
-    const { username, title, content } = Object.fromEntries(formData.entries());
+    const { username, title, content, todo } = Object.fromEntries(formData.entries());
 
     // 初期値
-    let imageUrl = null;
+    let imageUrl = "https://doodleipsum.com/640x400/";
 
     // 画像をSupabaseストレージにアップロード
-    const imageFile = formData.get("image") as File | null;
+    const imageFile = formData.get("image") as File;
     if (imageFile) {
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("upload")
@@ -41,6 +41,7 @@ export const postBBS = async (formData: FormData) => {
       username,
       title,
       content,
+      todo,
       imageUrl: imageUrl, // アップロードされた画像のURL
     });
 
