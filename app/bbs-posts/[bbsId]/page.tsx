@@ -1,6 +1,6 @@
 import { BBSData } from "@/app/types/type";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 async function getBBSDetailData(id: number) {
   const response = await fetch(`http://localhost:3000/api/post/${id}`, {
@@ -15,13 +15,22 @@ const DetailPage = async ({ params }: { params: { bbsId: number } }) => {
   const bbsDetailData = await getBBSDetailData(params.bbsId);
   const { title, content, createdAt, username, imageUrl, todo } = bbsDetailData;
 
+  // モーダル表示用の状態管理
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // モーダルを開く
+  const openModal = () => setIsModalOpen(true);
+
+  // モーダルを閉じる
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="mx-auto max-w-3xl p-6">
       {/* カード全体 */}
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         {/* 画像エリア */}
         {imageUrl && (
-          <div className="h-60 bg-gray-100">
+          <div className="h-60 bg-gray-100 cursor-pointer" onClick={openModal}>
             <img
               src={imageUrl}
               alt={title}
@@ -29,6 +38,26 @@ const DetailPage = async ({ params }: { params: { bbsId: number } }) => {
             />
           </div>
         )}
+
+        {/* モーダル */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div className="relative">
+              <img
+                src={imageUrl}
+                alt={title}
+                className="max-h-[90vh] max-w-[90vw] object-contain"
+              />
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-2 hover:bg-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* コンテンツエリア */}
         <div className="p-6">
           {/* タイトルとユーザー */}
