@@ -41,6 +41,11 @@ const Header = ({ onSearch }: { onSearch: (term: string) => void }) => {
 
           {/* ユーザー操作エリア */}
           <div className="flex items-center space-x-6">
+            <Link href="/create">
+              <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors">
+                出品
+              </button>
+            </Link>
             <Link href="/cart" className="hover:scale-110 transition-transform">
               <FiShoppingCart size={28} />
             </Link>
