@@ -30,8 +30,7 @@ export const formSchema = z.object({
     .min(2, { message: "タイトルは2文字以上で入力してください" }),
   content: z
     .string()
-    .min(10, { message: "内容は10文字以上で入力してください" })
-    .max(140, { message: "内容は140文字以内で入力してください" }),
+    .min(10, { message: "内容は10文字以上で入力してください" }),
   todo: z.string(),
 });
 
