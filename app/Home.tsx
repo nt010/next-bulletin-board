@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Header from "./components/layouts/header/Header";
 import CardList from "./components/layouts/cardList/CardList";
 import { BBSData } from "./types/type";
+import CategoryBar from "./components/layouts/header/Category";
 
 type HomeProps = {
   bbsAllData: BBSData[];
@@ -25,6 +26,7 @@ export default function Home({ bbsAllData }: HomeProps) {
   return (
     <main>
       <Header onSearch={handleSearch} />
+      <CategoryBar />
       <CardList bbsAllData={filteredData} />
     </main>
   );
