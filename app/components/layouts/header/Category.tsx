@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const categories = [
-  { name: "Book", id: "book", color: "bg-blue-200" },
+  { name: "書籍", id: "book", color: "bg-blue-200" },
   { name: "文房具", id: "stationery", color: "bg-green-200" },
   { name: "家電", id: "electronics", color: "bg-yellow-200" },
   { name: "ファッション", id: "fashion", color: "bg-pink-200" },
