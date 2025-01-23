@@ -8,24 +8,24 @@ const categories = [
   { name: "スポーツ", id: "sports", color: "bg-purple-200" },
 ];
 
-// ダミーデータ
-const items = [
-  { id: 1, name: "本1", category: "book" },
-  { id: 2, name: "ペン", category: "stationery" },
-  { id: 3, name: "冷蔵庫", category: "electronics" },
-  { id: 4, name: "Tシャツ", category: "fashion" },
-  { id: 5, name: "バスケットボール", category: "sports" },
-  { id: 6, name: "本2", category: "book" },
-  { id: 7, name: "ノート", category: "stationery" },
-];
+// // ダミーデータ
+// const items = [
+//   { id: 1, name: "本1", category: "book" },
+//   { id: 2, name: "ペン", category: "stationery" },
+//   { id: 3, name: "冷蔵庫", category: "electronics" },
+//   { id: 4, name: "Tシャツ", category: "fashion" },
+//   { id: 5, name: "バスケットボール", category: "sports" },
+//   { id: 6, name: "本2", category: "book" },
+//   { id: 7, name: "ノート", category: "stationery" },
+// ];
 
 const CategoryBar = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // フィルタリングされたアイテム
-  const filteredItems = selectedCategory
-    ? items.filter((item) => item.category === selectedCategory)
-    : items;
+  // const filteredItems = selectedCategory
+  //   ? items.filter((item) => item.category === selectedCategory)
+  //   : items;
 
   return (
     <div>
@@ -52,7 +52,7 @@ const CategoryBar = () => {
         ))}
       </div>
 
-      {/* アイテムリスト */}
+      {/* アイテムリスト
       <div className="container mx-auto mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
         {filteredItems.map((item) => (
           <div
@@ -68,7 +68,7 @@ const CategoryBar = () => {
             該当するアイテムがありません
           </p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
