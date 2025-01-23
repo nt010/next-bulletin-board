@@ -8,7 +8,7 @@ type CardListProps = {
 
 export default function CardList({ bbsAllData }: CardListProps) {
   if (!bbsAllData || bbsAllData.length === 0) {
-    return <div>No data available</div>;
+    return <div>該当する商品がありません</div>;
   }
 
   return (

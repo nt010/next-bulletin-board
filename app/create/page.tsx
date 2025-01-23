@@ -44,7 +44,7 @@ const CreatePage = () => {
       username: "",
       title: "",
       content: "",
-      todo: "500yen",
+      todo: "",
       image: undefined,
     },
   });
@@ -106,10 +106,10 @@ const CreatePage = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>UserName</FormLabel>
+                  <FormLabel>ユーザーネーム</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="username"
+                      placeholder="出品者名を入力してください"
                       className="resize-none"
                       {...field}
                     />
@@ -124,13 +124,11 @@ const CreatePage = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>タイトル</FormLabel>
                   <FormControl>
-                    <Input placeholder="Created-Content" {...field} />
+                    <Input placeholder="商品タイトルを入力してください" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -141,13 +139,28 @@ const CreatePage = () => {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Content</FormLabel>
+                  <FormLabel>説明文</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="shadcn" {...field} />
+                    <Textarea placeholder="例：
+ご覧いただきありがとうございます！
+【商品名】：商品名を記載してください
+【サイズ】：縦〇cm × 横〇cm × 高さ〇cm（該当する場合）
+【カラー】：色を記載してください
+【状態】：未使用品／新品同様／目立つ汚れなし／使用感あり（詳細を記載）
+【購入時期】：〇年〇月頃（わかる範囲で記載してください）
+
+◆商品のポイント◆
+商品の特徴やおすすめポイントを簡潔に記載してください。
+
+◆その他◆
+ペットや喫煙環境の有無など、購入者が気になる情報をご記載ください。
+
+【注意事項】
+・中古品のため、完璧を求める方はご遠慮ください。
+・簡易包装で発送します。
+・ご不明点がありましたらお気軽にコメントください！" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -158,7 +171,7 @@ const CreatePage = () => {
               name="todo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Todo</FormLabel>
+                  <FormLabel>やってほしいこと</FormLabel>
                   <FormControl>
                     <Input placeholder="やってほしいことを入力してください" {...field} />
                   </FormControl>
@@ -168,7 +181,7 @@ const CreatePage = () => {
             />
 
             <FormItem>
-              <FormLabel>Upload Image(only jpg・jpeg・png)</FormLabel>
+              <FormLabel>商品画像（jpg・jpeg・png）</FormLabel>
               <FormControl>
                 <Input
                   type="file"
@@ -193,7 +206,7 @@ const CreatePage = () => {
             </FormItem>
 
             <Button type="submit" className="w-full">
-              Submit
+              出品
             </Button>
           </form>
         </Form>
