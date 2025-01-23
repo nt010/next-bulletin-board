@@ -1,3 +1,28 @@
+知人・友人向けフリマサイト「TreMa」
+
+【概要】
+身内で気軽に不用品を共有できるサイトで、お金にならないような物品であっても物々交換のようなイメージでほしい人に譲ることができます。
+やり取りはチャットかメールで行うような想定で、出品することで新たな人脈形成やより深い友人との交流に貢献できるサイトにしていきます。
+
+【使用技術】
+・TypeScript(Next.js)
+・Prisma
+・Supabase
+
+【工夫した点】
+・金銭以外での等価交換が可能
+・自分の生活圏での人脈が広がる仕組み
+
+【苦戦した点】
+・データベースのカラム追加
+・画像データ保存
+
+
+![image](https://github.com/user-attachments/assets/64062cb3-877e-49d0-b094-03bc19973d54)
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
